@@ -23,7 +23,12 @@ def index():
 
         try:
             original_path = os.path.join("uploads", "original.jpg")
+            import time
+
+            original_path = os.path.join("uploads", "original.jpg")
             file.save(original_path)
+
+            time.sleep(0.2)
 
             cartoon = cartoonify_image(original_path)
 

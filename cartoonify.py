@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
 
+
 def edge_mask(img, line_size, blur_value):
+
     gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     gray_blur = cv2.medianBlur(gray, blur_value)
 
@@ -19,17 +21,20 @@ def edge_mask(img, line_size, blur_value):
 
 def color_quantization(img, k):
 
-    data = np.float32(img).reshape((-1,3))
+    data = np.float32(img).reshape((-1, 3))
 
     criteria = (
-        cv2.TERM_CRITERIA_EPS +
-        cv2.TERM_CRITERIA_MAX_ITER,
+        cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER,
         20,
         0.001
     )
 
-    ret, label, center = cv2.kmeans(
-        data, k, None, criteria, 10,
+    _, label, center = cv2.kmeans(
+        data,
+        k,
+        None,
+        criteria,
+        10,
         cv2.KMEANS_RANDOM_CENTERS
     )
 
@@ -40,12 +45,13 @@ def color_quantization(img, k):
 
     return result
 
+
 def cartoonify_image(path):
 
-    img = cv2.imread(path)
+    img = cv2.imread(path, cv2.IMREAD_COLOR)
 
     if img is None:
-        raise ValueError("Image could not be loaded")
+        raise ValueError(f"Image could not be loaded from {path}")
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
