@@ -1,12 +1,12 @@
 from flask import Flask, render_template, request
 import cv2
-import os
 import numpy as np
+import os
 from cartoonify import cartoonify_image
 
-os.makedirs("static", exist_ok=True)
-
 app = Flask(__name__)
+
+os.makedirs("static", exist_ok=True)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -22,13 +22,12 @@ def index():
             return render_template("index.html")
 
         try:
-            # Read uploaded file directly into memory
             file_bytes = np.frombuffer(file.read(), np.uint8)
 
             img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
             if img is None:
-                return "Invalid image file"
+                return "Invalid image"
 
             cartoon = cartoonify_image(img)
 
@@ -38,12 +37,11 @@ def index():
 
             return render_template(
                 "index.html",
-                cartoon="cartoon.jpg",
-                original=None
+                cartoon="cartoon.jpg"
             )
 
         except Exception as e:
-            print("SERVER Error:", e)
+            print("SERVER ERROR:", e)
             return "Error processing image"
 
     return render_template("index.html")
