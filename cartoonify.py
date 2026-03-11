@@ -21,12 +21,15 @@ def edge_mask(img, line_size, blur_value):
 
 def color_quantization(img, k):
 
-    data = np.float32(img).reshape((-1, 3))
+    # Downsample image for faster clustering
+    small = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
+
+    data = np.float32(small).reshape((-1,3))
 
     criteria = (
         cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER,
-        20,
-        0.001
+        10,
+        1.0
     )
 
     _, label, center = cv2.kmeans(
@@ -34,14 +37,17 @@ def color_quantization(img, k):
         k,
         None,
         criteria,
-        10,
+        5,
         cv2.KMEANS_RANDOM_CENTERS
     )
 
     center = np.uint8(center)
 
     result = center[label.flatten()]
-    result = result.reshape(img.shape)
+    result = result.reshape(small.shape)
+
+    # Resize back to original size
+    result = cv2.resize(result, (img.shape[1], img.shape[0]))
 
     return result
 
@@ -63,9 +69,9 @@ def cartoonify_image(img):
 
     blurred = cv2.bilateralFilter(
         quantized,
-        d=7,
-        sigmaColor=200,
-        sigmaSpace=200
+        d=5,
+        sigmaColor=75,
+        sigmaSpace=75
     )
 
     cartoon = cv2.bitwise_and(
