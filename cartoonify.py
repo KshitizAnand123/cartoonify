@@ -40,10 +40,13 @@ def color_quantization(img, k):
 
     return result
 
-
 def cartoonify_image(path):
 
     img = cv2.imread(path)
+
+    if img is None:
+        raise ValueError("Image could not be loaded")
+
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     edges = edge_mask(img, 7, 7)

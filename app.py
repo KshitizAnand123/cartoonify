@@ -22,7 +22,7 @@ def index():
             return render_template("index.html")
 
         try:
-            original_path = os.path.join("static", "original.jpg")
+            original_path = os.path.join("uploads", "original.jpg")
             file.save(original_path)
 
             cartoon = cartoonify_image(original_path)
@@ -38,11 +38,10 @@ def index():
             )
 
         except Exception as e:
-            print("Error:", e)
+            print("SERVER Error:", e)
             return "Error processing image"
 
     return render_template("index.html")
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
