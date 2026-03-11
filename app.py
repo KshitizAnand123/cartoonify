@@ -8,37 +8,38 @@ os.makedirs("static", exist_ok=True)
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = "uploads"
-OUTPUT_FOLDER = "static"
-
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
-
 @app.route("/", methods=["GET", "POST"])
 def index():
 
     if request.method == "POST":
 
+        if "image" not in request.files:
+            return render_template("index.html")
+
         file = request.files["image"]
 
-        original_path = os.path.join("static", "original.jpg")
-        file.save(original_path)
+        if file.filename == "":
+            return render_template("index.html")
 
-        # FIX 1
-        cartoon = cartoonify_image(original_path)
+        try:
+            original_path = os.path.join("static", "original.jpg")
+            file.save(original_path)
 
-        output_path = os.path.join(
-            OUTPUT_FOLDER,
-            "cartoon.jpg"
-        )
+            cartoon = cartoonify_image(original_path)
 
-        cv2.imwrite(output_path, cv2.cvtColor(cartoon, cv2.COLOR_RGB2BGR))
+            output_path = os.path.join("static", "cartoon.jpg")
 
-        return render_template(
-            "index.html",
-            cartoon="cartoon.jpg",
-            original="original.jpg"   # FIX 2
-        )
+            cv2.imwrite(output_path, cv2.cvtColor(cartoon, cv2.COLOR_RGB2BGR))
+
+            return render_template(
+                "index.html",
+                cartoon="cartoon.jpg",
+                original="original.jpg"
+            )
+
+        except Exception as e:
+            print("Error:", e)
+            return "Error processing image"
 
     return render_template("index.html")
 
