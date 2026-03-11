@@ -46,12 +46,7 @@ def color_quantization(img, k):
     return result
 
 
-def cartoonify_image(path):
-
-    img = cv2.imread(path, cv2.IMREAD_COLOR)
-
-    if img is None:
-        raise ValueError(f"Image could not be loaded from {path}")
+def cartoonify_image(img):
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 

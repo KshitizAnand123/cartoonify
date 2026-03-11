@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
 import cv2
 import os
+import numpy as np
 from cartoonify import cartoonify_image
 
-os.makedirs("uploads", exist_ok=True)
 os.makedirs("static", exist_ok=True)
 
 app = Flask(__name__)
@@ -22,15 +22,15 @@ def index():
             return render_template("index.html")
 
         try:
-            original_path = os.path.join("uploads", "original.jpg")
-            import time
+            # Read uploaded file directly into memory
+            file_bytes = np.frombuffer(file.read(), np.uint8)
 
-            original_path = os.path.join("uploads", "original.jpg")
-            file.save(original_path)
+            img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
-            time.sleep(0.2)
+            if img is None:
+                return "Invalid image file"
 
-            cartoon = cartoonify_image(original_path)
+            cartoon = cartoonify_image(img)
 
             output_path = os.path.join("static", "cartoon.jpg")
 
@@ -39,7 +39,7 @@ def index():
             return render_template(
                 "index.html",
                 cartoon="cartoon.jpg",
-                original="original.jpg"
+                original=None
             )
 
         except Exception as e:
@@ -47,6 +47,7 @@ def index():
             return "Error processing image"
 
     return render_template("index.html")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
