@@ -48,6 +48,13 @@ def color_quantization(img, k):
 
 def cartoonify_image(img):
 
+    # Resize large images to reduce computation
+    height, width = img.shape[:2]
+
+    if width > 800:
+        scale = 800 / width
+        img = cv2.resize(img, (int(width * scale), int(height * scale)))
+
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     edges = edge_mask(img, 7, 7)
