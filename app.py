@@ -3,6 +3,9 @@ import cv2
 import os
 from cartoonify import cartoonify_image
 
+os.makedirs("uploads", exist_ok=True)
+os.makedirs("static", exist_ok=True)
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "uploads"
