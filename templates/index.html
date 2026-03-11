@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cartoonify Image</title>
+
+<style>
+
+body{
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg,#eef2f7,#f9fbfd);
+    margin:0;
+    text-align:center;
+}
+
+/* Header */
+
+.header{
+    background:#1f2937;
+    color:white;
+    padding:22px;
+    font-size:32px;
+    font-weight:600;
+    letter-spacing:1px;
+}
+
+/* Main container */
+
+.container{
+    width:90%;
+    margin:auto;
+    margin-top:30px;
+}
+
+/* Upload section */
+
+.upload-box{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0px 6px 18px rgba(0,0,0,0.15);
+    margin-bottom:40px;
+}
+
+.upload-title{
+    font-size:22px;
+    margin-bottom:10px;
+    color:#333;
+}
+
+.upload-desc{
+    color:#666;
+    margin-bottom:20px;
+}
+
+/* File input */
+
+input[type=file]{
+    font-size:15px;
+}
+
+/* Button */
+
+button{
+    margin-top:15px;
+    padding:12px 28px;
+    font-size:16px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#1d4ed8;
+    transform:scale(1.03);
+}
+
+/* Image comparison section */
+
+.result-container{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+}
+
+/* Image cards */
+
+.image-card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0px 6px 18px rgba(0,0,0,0.15);
+    width:45%;
+}
+
+.image-title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:15px;
+}
+
+/* Images */
+
+.image-card img{
+    width:100%;
+    height:auto;
+    border-radius:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+Cartoonify Image using OpenCV
+</div>
+
+<div class="container">
+
+<div class="upload-box">
+
+<div class="upload-title">
+Upload an Image to Transform into Cartoon Style
+</div>
+
+
+<form method="POST" enctype="multipart/form-data">
+<input type="file" name="image" required>
+<br>
+<button type="submit">Cartoonify Image</button>
+</form>
+
+</div>
+
+{% if cartoon %}
+
+<div class="result-container">
+
+<div class="image-card">
+<div class="image-title">Original Image</div>
+<img src="{{ url_for('static', filename=original) }}">
+</div>
+
+<div class="image-card">
+<div class="image-title">Cartoon Image</div>
+<img src="{{ url_for('static', filename=cartoon) }}">
+</div>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
